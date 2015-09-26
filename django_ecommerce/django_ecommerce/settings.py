@@ -35,9 +35,17 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Added for flatpages
+    'django.contrib.flatpages',
+
+    # My apps
     'main',
+    'contact',
+    'payments',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -49,6 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 ROOT_URLCONF = 'django_ecommerce.urls'
@@ -78,7 +87,7 @@ WSGI_APPLICATION = 'django_ecommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'test.db'),
     }
 }
 
@@ -101,3 +110,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+print(STATICFILES_DIRS)
+
+SITE_ID = 1
+
+STRIPE_SECRET = ''
+STRIPE_PUBLISHABLE = ''
+

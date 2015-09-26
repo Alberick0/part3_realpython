@@ -1,0 +1,3 @@
+[submodule "book3-exercises"]
+	path = book3-exercises
+	url = https://github.com/realpython/book3-exercises.git
