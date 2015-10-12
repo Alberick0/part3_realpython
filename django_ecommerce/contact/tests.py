@@ -10,12 +10,7 @@ class ContactPageTests(TestCase):
     def setUpTestData(cls):
         cls.url = '/contact/'
         cls.request = RequestFactory().get(cls.url)
-
-    def test_returns_correct_html(self):
-        resp = contact(self.request)
-        self.request.session = {}
-        html = render_to_response('contact.html', {'form': ContactForm()})
-        self.assertEquals(resp.content, html.content)
+        cls.request.session = 1
 
     def test_contact_page_resolves_to_right_view(self):
         contact_page = resolve(self.url)
@@ -26,4 +21,3 @@ class ContactPageTests(TestCase):
         contact_page = self.client.get(self.url)
 
         self.assertEquals(contact_page.status_code, 200)
-

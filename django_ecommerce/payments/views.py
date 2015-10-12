@@ -58,7 +58,9 @@ def register(request):
 
         if form.is_valid():
             #  update based on your billing method (subscription vs one time)
-            customer = stripe.Customer.create(
+            cd = form.cleaned_data
+
+            customer = Customer.create(
                 email=form.cleaned_data['email'],
                 description=form.cleaned_data['name'],
                 card=form.cleaned_data['stripe_token'],
@@ -72,20 +74,19 @@ def register(request):
             # currency="usd"
             # )
 
-            user = User(
-                name=form.cleaned_data['name'],
-                email=form.cleaned_data['email'],
-                last_4_digitss=form.cleaned_data['last_4_digitss'],
-                stripe_id=customer.id,
-            )
-
-            # ensure encrypted password
-            user.set_password(form.cleaned_data['password'])
+            # The part above creates the new user
 
             try:
-                user.save()
+                user = User.create(
+                    cd['name'],
+                    cd['email'],
+                    cd['password'],
+                    cd['last_4_digits'],
+                    customer.id
+                )
             except IntegrityError:
                 form.addError(user.email + 'is already a member')
+                user = None
             else:
                 request.session['user'] = user.pk
 
@@ -123,7 +124,7 @@ def edit(request):
             customer = stripe.Customer.retrieve(user.stripe_id)
             customer.card = form.cleaned_data['stripe_token']
             customer.save()
-            user.last_4_digitss = form.cleaned_data['stripe_token']
+            user.last_4_digits = form.cleaned_data['stripe_token']
             user.stripe_id = customer.id
             user.save()
 
@@ -138,3 +139,12 @@ def edit(request):
                       'years': range(2011, 2036)},
         context_instance=RequestContext(request)
     )
+
+
+class Customer(object):
+    @classmethod
+    def create(cls, billing_method='subscription', **kwargs):
+        if billing_method == 'subscription':
+            return stripe.Customer.create(**kwargs)
+        elif billing_method == 'one_time':
+            return stripe.Charge.create(**kwargs)

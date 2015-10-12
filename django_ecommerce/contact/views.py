@@ -3,6 +3,8 @@ from django.template import RequestContext, loader
 from .forms import ContactView
 from django.contrib import messages
 
+from payments.views import User
+
 
 def contact(request):
     if request.method == 'POST':
@@ -20,5 +22,5 @@ def contact(request):
         form = ContactView()
 
     t = loader.get_template('contact.html')
-    c = RequestContext(request, {'form': form, })
+    c = RequestContext(request, {'form': form, 'user': None})
     return HttpResponse(t.render(c))

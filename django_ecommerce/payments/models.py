@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser
 
 class User(AbstractBaseUser):
     name = models.CharField(max_length=100)
-    email = models.CharField(max_length=50)
+    email = models.CharField(unique=True, max_length=50)
 
     # password field defined in base class
     last_4_digits = models.CharField(max_length=4, blank=True, null=True)
@@ -21,6 +21,15 @@ class User(AbstractBaseUser):
         User object
         """
         return User.objects.get(pk=uid)
+
+    @classmethod
+    def create(cls, name, email, password, last_4_digits, stripe_id):
+        new_user = cls(name=name, email=email, last_4_digits=last_4_digits,
+                       stripe_id=stripe_id)
+        new_user.set_password(password)
+        new_user.save()
+
+        return new_user
 
     def __str__(self):
         return self.email
