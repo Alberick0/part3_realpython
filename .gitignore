@@ -46,6 +46,7 @@ nosetests.xml
 coverage.xml
 *,cover
 
+/book3-exercises
 # Translations
 *.mo
 *.pot
