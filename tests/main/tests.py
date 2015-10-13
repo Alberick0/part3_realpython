@@ -44,7 +44,7 @@ class MainPageTests(TestCase):
             'index.html').content)
 
     def test_index_handles_logged_in_user(self):
-        """                                                 payments_user
+        """
         Verifies the right template is used with a logged user
         """
         # create the user needed for user lookup from index page
