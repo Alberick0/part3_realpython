@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.core.urlresolvers import resolve
-from .views import index
+from main.views import index
 from django.shortcuts import render_to_response
 from django.test import RequestFactory
 from payments.models import User
