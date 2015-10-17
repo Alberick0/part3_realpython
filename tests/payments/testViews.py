@@ -1,3 +1,4 @@
+import socket
 import mock
 import django_ecommerce.settings as settings
 
@@ -88,3 +89,29 @@ class RegisterPageTests(TestCase):
         # verified the user was stored in the DB
         create_mock.assert_called_with('pyRock', 'python@rocks.com',
                                        'bad_password', '4242', new_cust.id)
+
+    def test_registering_user_when_stripe_is_down(self):
+        # request used to test the view
+        self.request.session = {}
+        self.request.method = 'POST'
+        self.request.POST = {
+            'email': 'python@rocks.com',
+            'name': 'pyRock',
+            'stripe_token': '4242424242424242',
+            'last_4_digits': '4242',
+            'password': 'bad_password',
+            'ver_password': 'bad_password',
+        }
+
+        # mocking stripe and asking to threw an error
+        with mock.patch('stripe.Customer.create',
+                        side_effect=socket.error("Can't connect to Stripe")
+                        ) as stripe_mock:
+            # run test
+            register(self.request)
+
+            # assert there is a record in the db without Stripe id
+            users = User.objects.filter(email='python@rocks.com')
+
+            self.assertEquals(len(users), 1)
+            self.assertEquals(users[0].stripe_id, '')
