@@ -1,4 +1,5 @@
-from django.test import TestCase
+from django.test import SimpleTestCase
+
 from payments.forms import UserForm, CardForm, SigninForm
 
 
@@ -11,7 +12,7 @@ class FormTesterMixin:
         # if we get an error then the form should not be valid
         self.assertFalse(test_form.is_valid())
 
-        self.assertEquals(
+        self.assertEqual(
             test_form.errors[expected_error_name],
             expected_error_msg,
             msg="Expected {} : Actual {}: using data {}".format(
@@ -20,7 +21,7 @@ class FormTesterMixin:
         )
 
 
-class FormTests(TestCase, FormTesterMixin):
+class FormTests(SimpleTestCase, FormTesterMixin):
     def test_signing_form_data_validation_for_invalid_data(self):
         invalid_data_list = [
             {'data': {'email': 'j@j.com'},
@@ -30,8 +31,9 @@ class FormTests(TestCase, FormTesterMixin):
         ]
 
         for invalid_data in invalid_data_list:
-            self.assertFormError(SigninForm, invalid_data['error'][0],
-                                 invalid_data['error'][1], invalid_data['data'])
+            self.should_have_form_error(SigninForm, invalid_data['error'][0],
+                                        invalid_data['error'][1],
+                                        invalid_data['data'])
 
     def test_user_form_passwords_match(self):
         form = UserForm(
@@ -78,7 +80,7 @@ class FormTests(TestCase, FormTesterMixin):
         ]
 
         for invalid_data in invalid_data_list:
-            self.assertFormError(CardForm,
-                                 invalid_data['error'][0],
-                                 invalid_data['error'][1],
-                                 invalid_data['data'])
+            self.should_have_form_error(CardForm,
+                                        invalid_data['error'][0],
+                                        invalid_data['error'][1],
+                                        invalid_data['data'])
