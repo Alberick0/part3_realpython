@@ -123,4 +123,3 @@ SITE_ID = 1
 
 STRIPE_SECRET = 'sk_test_28Gg99fjOpWqeel8CHMPpwLx'
 STRIPE_PUBLISHABLE = 'pk_live_aPtY1nvmIuSENNKKiUFezAQG'
-

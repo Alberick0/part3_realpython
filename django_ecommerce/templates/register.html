@@ -9,10 +9,14 @@
     </div>
     <div class="row">
         <div class="span6 columns">
-            <form id="user_form" accept-charset="UTF-8" action="{% url 'register' %}" class="form-stacked"  method="post">
+            <form id="user_form" accept-charset="UTF-8"
+                  action="{% url 'register' %}" class="form-stacked"
+                  method="post">
                 {% csrf_token %}
                 {% if form.is_bound and not form.is_valid %}
-                    <div class="alert alert-{{error.tags}}"> <a class="close" data-dismiss="alert">×</a>
+                    <div class="alert alert-{{ error.tags }}"><a class="close"
+                                                                 data-dismiss="alert">×</a>
+
                         <div class="errors">
                             {% for field in form.visible_fields %}
                                 {% for error in field.errors %}
@@ -28,7 +32,9 @@
                 {% for field in form.visible_fields %}
                     {% include "field.html" %}
                 {% endfor %}
-                <div id="change-card" class="clearfix"{% if not form.last_4_digitss.value %} style="display: none"{% endif %}>
+                <div id="change-card" class="clearfix"
+                        {% if not form.last_4_digitss.value %}
+                     style="display: none"{% endif %}>
                     Card
                     <div class="input">
                         Using card ending with {{ form.last_4_digitss.value }}

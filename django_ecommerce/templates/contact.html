@@ -3,13 +3,15 @@
 
 {% block content %}
 
-<h3><center>Contact Us</center></h3>
+    <h3>
+        <center>Contact Us</center>
+    </h3>
 
-<form action='.' method='POST'>
-  {% csrf_token %}
-  {{ form.as_table }}
-  <br>
-  <button type='submit' class='btn btn-primary'>Submit</button>
-</form>
+    <form action='.' method='POST'>
+        {% csrf_token %}
+        {{ form.as_table }}
+        <br>
+        <button type='submit' class='btn btn-primary'>Submit</button>
+    </form>
 
 {% endblock %}

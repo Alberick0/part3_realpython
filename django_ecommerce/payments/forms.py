@@ -16,6 +16,7 @@ class SigninForm(PaymentForm):
 class CardForm(PaymentForm):
     last_4_digits = forms.CharField(required=True, min_length=4,
                                     max_length=4, widget=forms.HiddenInput())
+
     stripe_token = forms.CharField(required=True, widget=forms.HiddenInput())
 
 
@@ -24,6 +25,7 @@ class UserForm(CardForm):
     email = forms.EmailField(required=True)
     password = forms.CharField(required=True, label=u'Password',
                                widget=forms.PasswordInput(render_value=False))
+
     ver_password = forms.CharField(required=True, label=u'Verify Password',
                                    widget=forms.PasswordInput(
                                        render_value=False))

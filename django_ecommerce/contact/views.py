@@ -1,9 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
-from .forms import ContactView
 from django.contrib import messages
 
-from payments.views import User
+from .forms import ContactView
 
 
 def contact(request):
@@ -13,9 +12,9 @@ def contact(request):
         if form.is_valid():
             our_form = form.save(commit=False)
             our_form.save()
-            messages.add_message(request, messages.INFO, 'Your message has '
-                                                         'been sent. Thank '
-                                                         'you.')
+            messages.add_message(request, messages.INFO,
+                                 'Your message has been sent. Thank you.')
+
             return HttpResponseRedirect('/')
 
     else:
