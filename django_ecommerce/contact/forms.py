@@ -1,6 +1,7 @@
 from django.forms import ModelForm
-from .models import ContactForm
 from django import forms
+
+from .models import ContactForm
 
 
 class ContactView(ModelForm):
@@ -8,4 +9,4 @@ class ContactView(ModelForm):
 
     class Meta:
         model = ContactForm
-        fields = '__all__'
+        fields = ['name', 'email', 'topic', 'message']
