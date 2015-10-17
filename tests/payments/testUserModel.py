@@ -1,11 +1,10 @@
 import mock
-import django_ecommerce.settings as settings
-
 from django import forms
 from django.test import TestCase, RequestFactory
 from django.shortcuts import render_to_response
 from django.db import IntegrityError
 
+import django_ecommerce.settings as settings
 from payments.models import User
 from payments.views import sign_out, register, soon
 
@@ -45,7 +44,7 @@ class UserModelTest(TestCase):
         self.assertEquals(str(self.test_user), 'test@testing.com')
 
     def test_get_by_id(self):
-        self.assertEquals(User.get_by_id(1), self.test_user)
+        self.assertEquals(User.get_by_id(0), self.test_user)
 
     # -- Testing logout -- #
     def test_user_logout_functionality_works(self):
