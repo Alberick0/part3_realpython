@@ -45,7 +45,10 @@ def sign_in(request):
 
 
 def sign_out(request):
-    del request.session['user']
+    try:
+        del request.session['user']
+    except KeyError:
+        pass
 
     return HttpResponseRedirect('/')
 
@@ -85,7 +88,7 @@ def register(request):
                     customer.id
                 )
             except IntegrityError:
-                form.addError(user.email + 'is already a member')
+                form.addError(cd['email'] + 'is already a member')
                 user = None
             else:
                 request.session['user'] = user.pk
