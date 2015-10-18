@@ -57,20 +57,20 @@ class SignInPageTests(TestCase, ViewTesterMixin):
 
 class RegisterPageTests(TestCase, ViewTesterMixin):
     @classmethod
-    def setUpTestData(cls):
-        cls.html = render_to_response(
+    def setUpClass(cls):
+        super().setUpClass()
+        html = render_to_response(
             'register.html',
             {
                 'form': UserForm(),
-                'months': range(1, 12),
+                'months': list(range(1, 12)),
                 'publishable': settings.STRIPE_PUBLISHABLE,
                 'soon': soon(),
                 'user': None,
-                'years': range(2011, 2036),
-            }
-        )
+                'years': list(range(2011, 2036)),
+            })
 
-        ViewTesterMixin.setupViewTester('/register', register, cls.html.content)
+        ViewTesterMixin.setupViewTester('/register', register, html.content)
 
     def setUp(self):
         request_factory = RequestFactory()
@@ -86,41 +86,41 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
             self.request.method = 'POST'
             self.request.POST = None
             resp = register(self.request)
-            self.assertEquals(resp.content, self.html.content)
+            self.assertEquals(resp.content, self.expected_html)
 
             # make sure that we did indeed call our is_valid function
             self.assertEquals(user_mock.call_count, 1)
 
-    @mock.patch('payments.views.Customer.create')
-    @mock.patch.object(User, 'create')  # mocks the create method from User
-    def test_registering_new_user_returns_successfully(self, create_mock,
-                                                       stripe_mock):
+    def get_mock_cust():
+        class mock_cust:
+            @property
+            def id(self):
+                return 1234
+
+        return mock_cust()
+
+    @mock.patch('payments.views.Customer.create', return_value=get_mock_cust())
+    def test_registering_new_user_returns_successfully(self, stripe_mock):
         self.request.session = {}
         self.request.method = 'POST'
         self.request.POST = {
             'email': 'python@rocks.com',
             'name': 'pyRock',
-            'stripe_token': '4242424242424242',
+            'stripe_token': '...',
             'last_4_digits': '4242',
             'password': 'bad_password',
             'ver_password': 'bad_password',
         }
 
-        # get the return values of the mocks
-        new_user = create_mock.return_value
-        new_cust = stripe_mock.return_value
-
         resp = register(self.request)
 
         # Added decode so it would return string instead of byte
         self.assertEquals(resp.content, b'')
-
         self.assertEquals(resp.status_code, 302)
-        self.assertEquals(self.request.session['user'], new_user.pk)
 
-        # verified the user was stored in the DB
-        create_mock.assert_called_with('pyRock', 'python@rocks.com',
-                                       'bad_password', '4242', new_cust.id)
+        users = User.objects.filter(email='python@rocks.com')
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0].stripe_id, '1234')
 
     def get_MockUserForm(self):
         from django import forms
@@ -190,7 +190,7 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
         self.request.POST = {
             'email': 'python@rocks.com',
             'name': 'pyRock',
-            'stripe_token': '',
+            'stripe_token': '...',
             'last_4_digits': '4242',
             'password': 'bad_password',
             'ver_password': 'bad_password',
