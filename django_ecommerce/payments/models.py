@@ -33,3 +33,10 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.email
+
+
+class UnPaidUsers(models.Model):
+    email = models.CharField(max_length=100, unique=True)
+
+    # with 'auto_now' there's no need to import datetime
+    last_notification = models.DateTimeField(auto_now=True)
