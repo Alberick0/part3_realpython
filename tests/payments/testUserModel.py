@@ -19,7 +19,7 @@ class UserModelTest(TestCase):
         self.assertEquals(str(self.test_user), 'test@testing.com')
 
     def test_get_by_id(self):
-        self.assertEqual(User.get_by_id(2), self.test_user)
+        self.assertEqual(User.get_by_id(1), self.test_user)
 
     # -- Testing logout -- #
     def test_create_user_function_stores_in_database(self):

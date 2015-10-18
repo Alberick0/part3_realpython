@@ -1,15 +1,15 @@
 import socket
-import mock
-import django_ecommerce.settings as settings
 
+import mock
 from django.test import TestCase, RequestFactory
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import resolve
 from django.db import IntegrityError
 
+import django_ecommerce.settings as settings
 from payments.forms import UserForm, SigninForm
 from payments.views import register, soon, sign_out, sign_in
-from payments.models import User
+from payments.models import User, UnPaidUsers
 
 
 class ViewTesterMixin(object):
@@ -206,6 +206,11 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
 
             # assert there is a record in the db without Stripe id
             users = User.objects.filter(email='python@rocks.com')
+            unpaid = UnPaidUsers.objects.filter(email="python@rocks.com")
+
+            self.assertEquals(len(unpaid), 1)
+            # Makes sure there was a notification
+            self.assertIsNotNone(unpaid[0].last_notification)
 
             self.assertEquals(len(users), 1)
             self.assertEquals(users[0].stripe_id, '')

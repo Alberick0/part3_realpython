@@ -1,14 +1,15 @@
 import socket
-import stripe
 import datetime
-import django_ecommerce.settings as settings
 
+import stripe
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
+
+import django_ecommerce.settings as settings
 from .forms import SigninForm, CardForm, UserForm
-from .models import User
+from .models import User, UnPaidUsers
 
 stripe.api_key = settings.STRIPE_SECRET
 
@@ -93,8 +94,14 @@ def register(request):
                 if customer:
                     user.stripe_id = customer.id
                     user.save()
+                else:
+                    UnPaidUsers(email=cd['email']).save()
+
             except IntegrityError:
-                form.addError(cd['email'] + 'is already a member')
+                import traceback
+
+                form.addError(cd['email'] + 'is already a member' +
+                              traceback.format_exc())
                 user = None
             else:
                 request.session['user'] = user.pk
