@@ -4,7 +4,7 @@ import mock
 from django.test import TestCase, RequestFactory
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import resolve
-from django.db import IntegrityError, transaction
+from django.db import IntegrityError, transaction, DatabaseError
 
 import django_ecommerce.settings as settings
 from payments.forms import UserForm, SigninForm
@@ -200,7 +200,6 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
         with mock.patch('stripe.Customer.create',
                         side_effect=socket.error("Can't connect to Stripe")
                         ) as stripe_mock:
-
             # run test
             register(self.request)
 
@@ -217,7 +216,7 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
 
     @mock.patch('payments.models.UnPaidUsers.save', side_effect=IntegrityError)
     def test_registering_user_when_stripe_is_down_all_or_nothing(self,
-                                                                  save_mock):
+                                                                 save_mock):
 
         # create the request used to test the view
         self.request.session = {}
@@ -234,7 +233,6 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
         # mock out stripe to return a connection error
         with mock.patch('stripe.Customer.create', side_effect=socket.error(
                 "can't connect to stripe")) as stripe_mock:
-
             # run the test
             resp = register(self.request)
 
@@ -248,7 +246,7 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
 
     @transaction.atomic()
     def save_points(self, save=True):
-        user = User.create('jj', 'inception', 'jj', '1234')
+        user = User.create('jj', 'inception', 'jj', '1234', '...')
         sp1 = transaction.savepoint()
 
         user.name = 'starting down the rabbit hole'
@@ -262,7 +260,15 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
         else:
             transaction.savepoint_rollback(sp1)
 
-        user.create('limbo', 'illbehere@forever', 'mind blown', '1111')
+        try:
+            with transaction.atomic():
+                user.create('limbo', 'illbehere@forever', 'mind blown', '1111')
+
+            if not save:
+                raise DatabaseError
+
+        except DatabaseError:
+            pass
 
     def test_savepoint_roolbacks(self):
         self.save_points(False)
@@ -282,6 +288,10 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
         self.assertEquals(users[0].stripe_id, '')
         self.assertEquals(users[0].name, 'jj')
 
+        # this save point was rolled back because of DatabaseError
+        limbo = User.objects.filter(email='illbehere@forever')
+        self.assertEquals(len(limbo), 0)
+
     def test_savepoint_commit(self):
         self.save_points(True)
 
@@ -292,3 +302,8 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
         # note the values here are from the update calls
         self.assertEquals(users[0].stripe_id, '4')
         self.assertEquals(users[0].name, 'staring down the rabbit hole')
+
+        # save point was committed by exiting the context_manager without an
+        # exception
+        limbo = User.objects.filter(email='illbehere@forever')
+        self.assertEquals(len(limbo), 1)
