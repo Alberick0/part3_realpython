@@ -4,7 +4,7 @@ import mock
 from django.test import TestCase, RequestFactory
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import resolve
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 
 import django_ecommerce.settings as settings
 from payments.forms import UserForm, SigninForm
@@ -214,3 +214,81 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
 
             self.assertEquals(len(users), 1)
             self.assertEquals(users[0].stripe_id, '')
+
+    @mock.patch('payments.models.UnPaidUsers.save', side_effect=IntegrityError)
+    def test_registering_user_when_stripe_is_down_all_or_nothing(self,
+                                                                  save_mock):
+
+        # create the request used to test the view
+        self.request.session = {}
+        self.request.method = 'POST'
+        self.request.POST = {
+            'email': 'python@rocks.com',
+            'name': 'pyRock',
+            'stripe_token': '...',
+            'last_4_digits': '4242',
+            'password': 'bad_password',
+            'ver_password': 'bad_password',
+        }
+
+        # mock out stripe to return a connection error
+        with mock.patch('stripe.Customer.create', side_effect=socket.error(
+                "can't connect to stripe")) as stripe_mock:
+
+            # run the test
+            resp = register(self.request)
+
+            # assert there is no new record in the DB
+            users = User.objects.filter(email='pyton@rocks.com')
+            self.assertEquals(len(users), 0)
+
+            # check the associated table has no updated data
+            unpaid = UnPaidUsers.objects.filter(email='python@rocks.com')
+            self.assertEquals(len(unpaid), 0)
+
+    @transaction.atomic()
+    def save_points(self, save=True):
+        user = User.create('jj', 'inception', 'jj', '1234')
+        sp1 = transaction.savepoint()
+
+        user.name = 'starting down the rabbit hole'
+        user.save()
+
+        user.stripe_id = 4
+        user.save()
+
+        if save:
+            transaction.savepoint_commit(sp1)
+        else:
+            transaction.savepoint_rollback(sp1)
+
+        user.create('limbo', 'illbehere@forever', 'mind blown', '1111')
+
+    def test_savepoint_roolbacks(self):
+        self.save_points(False)
+
+        # verify that everything was stored
+        users = User.objects.filter(email='inception')
+        self.assertEquals(len(users), 1)
+
+    def test_savepoint_rollbacks(self):
+        self.save_points(False)
+
+        # verify that everything was stored
+        users = User.objects.filter(email='inception')
+        self.assertEquals(len(users), 1)
+
+        # note the values here are from the original create call
+        self.assertEquals(users[0].stripe_id, '')
+        self.assertEquals(users[0].name, 'jj')
+
+    def test_savepoint_commit(self):
+        self.save_points(True)
+
+        # verify that everything was stored
+        users = User.objects.filter(email='inception')
+        self.assertEquals(len(users), 1)
+
+        # note the values here are from the update calls
+        self.assertEquals(users[0].stripe_id, '4')
+        self.assertEquals(users[0].name, 'staring down the rabbit hole')
