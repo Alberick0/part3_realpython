@@ -151,8 +151,10 @@ def edit(request):
     return render_to_response(
         'edit.html', {'form': form,
                       'publishable': settings.STRIPE_PUBLISHABLE,
-                      'soon': soon(), 'months': range(1, 12),
-                      'years': range(2011, 2036)},
+                      'soon': soon(),
+                      'months': list(range(1, 12)),
+                      'years': list(range(2011, 2036))
+                      },
         context_instance=RequestContext(request)
     )
 

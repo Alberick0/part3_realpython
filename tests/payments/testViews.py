@@ -115,8 +115,8 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
         resp = register(self.request)
 
         # Added decode so it would return string instead of byte
-        self.assertEquals(resp.content, b'')
-        self.assertEquals(resp.status_code, 302)
+        self.assertEqual(resp.content, b'')
+        self.assertEqual(resp.status_code, 302)
 
         users = User.objects.filter(email='python@rocks.com')
         self.assertEqual(len(users), 1)
