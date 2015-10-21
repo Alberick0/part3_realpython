@@ -17,7 +17,7 @@ body {
     background-color: #eee;
 }
 
-h1 {
+h1, .nav li, .navbar-brand {
     font-family: 'starjedi', sans-serif;
 }
 
@@ -27,4 +27,8 @@ h1 {
 
 .featurette-divider {
     margin: 80px 0;
+}
+
+.navbar-brand {
+    height: 40px;
 }
