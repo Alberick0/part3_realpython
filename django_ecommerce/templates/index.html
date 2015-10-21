@@ -4,9 +4,12 @@
 
     {% load static %}
 
+    <!--CAROUSEL ==========================================================  -->
     <center>
+{#        data-ride starts the carousel on page load#}
         <section id="myCarousel" class="carousel slide" data-ride="carousel" style="max-width: 960px;">
             <!-- Indicators -->
+{#            the "ol" displays the dots for navigation#}
             <ol class="carousel-indicators">
                 <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                 <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -74,5 +77,54 @@
             </a>
         </section>
     </center>
+
+    <br><br>
+
+    <section class="container marketing">
+        <!-- Three columns of text below the carousel -->
+        <div class="row center-text">
+            <div class="col-lg-4">
+                <img src="{% static "img/yoda.jpg" %}" alt="Generic placeholder image"
+                     class="img-circle" width="140" height="140">
+
+                <h2>Hone your Jedi Skills</h2>
+
+                <p>All members have access to our unique training and
+                    achievements ladders. Progress through the levels and show
+                    everyone who the top Jedi Master is</p>
+
+                <p><a href="#" class="btn btn-default" role="button">Sign Up
+                    Now &raquo;</a></p>
+            </div>
+
+            <div class="col-lg-4">
+                <img src="{% static "img/clone_army.jpg" %}" alt="Clone Army"
+                     class="img-circle" width="140" height="140">
+
+                <h2>Build your Clan</h2>
+
+                <p>Engage in meaningful conversation, or bloodthirsty battle!
+                    If it's related to Star Wars, in anyway you better
+                    believe we do it here.</p>
+
+                <p><a href="#" class="btn btn-default" role="button">Sign Up
+                    Now &raquo;</a></p>
+            </div>
+
+            <div class="col-lg-4">
+                <img src="{% static "img/leia.jpg" %}" alt="Leia"
+                     class="img-circle" width="140" height="140">
+
+                <h2>Find Love</h2>
+
+                <p>Everybody knows that Star Wars are the best mates for
+                    Star Wars fans. Find your Princess Leia or Han Solo and
+                    explore the starts together</p>
+
+                <p><a href="#" class="btn btn-default" role="button">Sign Up
+                    Now &raquo;</a></p>
+            </div>
+        </div>
+    </section>
 
 {% endblock %}
