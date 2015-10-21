@@ -43,7 +43,8 @@ def sign_in(request):
     else:
         form = SigninForm()
 
-    return render_to_response('sign_in.html', {'form': form, 'user': user},
+    return render_to_response('payments/sign_in.html', {'form': form,
+                                                        'user': user},
                               context_instance=RequestContext(request))
 
 
@@ -112,7 +113,7 @@ def register(request):
         form = UserForm()
 
     return render_to_response(
-        'register.html',
+        'payments/register.html',
         {
             'form': form,
             'months': list(range(1, 12)),
@@ -149,12 +150,12 @@ def edit(request):
         form = CardForm()
 
     return render_to_response(
-        'edit.html', {'form': form,
-                      'publishable': settings.STRIPE_PUBLISHABLE,
-                      'soon': soon(),
-                      'months': list(range(1, 12)),
-                      'years': list(range(2011, 2036))
-                      },
+        'payments/edit.html', {'form': form,
+                               'publishable': settings.STRIPE_PUBLISHABLE,
+                               'soon': soon(),
+                               'months': list(range(1, 12)),
+                               'years': list(range(2011, 2036))
+                               },
         context_instance=RequestContext(request)
     )
 

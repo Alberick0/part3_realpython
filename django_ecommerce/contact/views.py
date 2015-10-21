@@ -20,6 +20,6 @@ def contact(request):
     else:
         form = ContactView()
 
-    t = loader.get_template('contact.html')
+    t = loader.get_template('contact/contact.html')
     c = RequestContext(request, {'form': form, 'user': None})
     return HttpResponse(t.render(c))
