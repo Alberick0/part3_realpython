@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.core.urlresolvers import resolve
-from main.views import index
 from django.shortcuts import render_to_response
 from django.test import RequestFactory
+
+from main.views import index
 from payments.models import User
 
 
@@ -41,7 +42,7 @@ class MainPageTests(TestCase):
     def test_returns_exact_html(self):
         index = self.client.get('/')
         self.assertEquals(index.content, render_to_response(
-            'index.html').content)
+            'main/index.html').content)
 
     def test_index_handles_logged_in_user(self):
         """
@@ -61,4 +62,4 @@ class MainPageTests(TestCase):
 
         # verify it return the page for the logged in user
         self.assertEquals(resp.content, render_to_response(
-            'user.html', {'user': user}).content)
+            'main/user.html', {'user': user}).content)
