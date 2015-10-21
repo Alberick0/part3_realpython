@@ -1,6 +1,7 @@
 {% load staticfiles %}
 
 <div class="col-lg-4">
+    <!-- | add:img is used for concatenation -->
     <img src="{% static 'img/' | add:img %}" alt="{{ img }}" class="img-circle" width="140" height="140">
 
     <h2>{{ heading }}</h2>
