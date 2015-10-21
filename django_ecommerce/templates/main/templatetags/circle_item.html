@@ -1,12 +1,14 @@
 {% load staticfiles %}
 
-<div class="col-lg-4">
-    <!-- |add:img is used for concatenation -->
-    <img src="{% static 'img/'|add:img %}" alt="{{ img }}" class="img-circle" width="140" height="140">
+{% for m in marketing_items  %}
+    <div class="col-lg-4">
+        <!-- |add:img is used for concatenation -->
+        <img src="{% static 'img/'|add:m.img %}" alt="{{ m.img }}" class="img-circle" width="140" height="140">
 
-    <h2>{{ heading }}</h2>
+        <h2>{{ m.heading }}</h2>
 
-    <p>{{ caption }}</p>
+        <p>{{ m.caption }}</p>
 
-    <p><a href="{% url button_link %}" class="btn btn-default" role="button">{{ button_title }}</a></p>
-</div>
+        <p><a href="{% url m.button_link %}" class="btn btn-default" role="button">{{ m.button_title }} &raquo;</a></p>
+    </div>
+{% endfor %}
