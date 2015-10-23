@@ -13,3 +13,10 @@ class StatusReport(models.Model):
     user = models.ForeignKey('payments.User')
     when = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=200)
+
+
+class Announcements(models.Model):
+    when = models.DateTimeField(auto_now=True)
+    img = models.CharField(max_length=25, null=True)
+    vid = models.URLField(null=True)
+    info = models.TextField()
