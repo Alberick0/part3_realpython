@@ -13,7 +13,7 @@ class User(AbstractBaseUser):
     updated_at = models.DateTimeField(auto_now=True)
     rank = models.CharField(max_length=50, default='Padwan')
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'email'  # describes a unique field as an unique Identifier
 
     @classmethod
     def get_by_id(cls, uid):

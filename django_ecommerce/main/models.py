@@ -18,5 +18,8 @@ class StatusReport(models.Model):
 class Announcements(models.Model):
     when = models.DateTimeField(auto_now=True)
     img = models.CharField(max_length=25, null=True)
-    vid = models.URLField(null=True)
+    vid = models.URLField(null=True, blank=True)
     info = models.TextField()
+
+    class Meta:
+        verbose_name_plural = "Announcements"  # fixes typo in admin

@@ -1,7 +1,8 @@
+from datetime import date, timedelta
 from django.shortcuts import render_to_response, RequestContext
 
 from payments.models import User
-from main.models import MarketingItem, StatusReport
+from main.models import MarketingItem, StatusReport, Announcements
 
 
 def index(request):
@@ -15,14 +16,16 @@ def index(request):
                                   {'marketing_items': marketing_items})
     else:
         status = StatusReport.objects.all().order_by('-when')[:20]
+        announce_date = date.today() - timedelta(days=30)
+        announce = Announcements.objects.filter(
+            when__gt=announce_date).order_by('-when')
 
         return render_to_response(
             'main/user.html', {'user': User.get_by_id(uid),
-                               'reports': status
-                               },
-            context_instance=RequestContext(request)
-            # context was added because our template includes csrf_token
-        )
+                               'reports': status,
+                               'announce': announce},
+            context_instance=RequestContext(request))
+        # context was added because our template includes csrf_token
 
 
 def report(request):
