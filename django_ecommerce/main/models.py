@@ -15,11 +15,14 @@ class StatusReport(models.Model):
     status = models.CharField(max_length=200)
 
 
-class Announcements(models.Model):
+class Announcement(models.Model):
     when = models.DateTimeField(auto_now=True)
     img = models.CharField(max_length=25, null=True)
     vid = models.URLField(null=True, blank=True)
     info = models.TextField()
 
-    class Meta:
-        verbose_name_plural = "Announcements"  # fixes typo in admin
+    # class Meta:
+    #     verbose_name_plural = "Announcements"  # fixes typo in admin
+
+
+# class Badge

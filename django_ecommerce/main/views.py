@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from django.shortcuts import render_to_response, RequestContext
 
 from payments.models import User
-from main.models import MarketingItem, StatusReport, Announcements
+from main.models import MarketingItem, StatusReport, Announcement
 
 
 def index(request):
@@ -17,8 +17,9 @@ def index(request):
     else:
         status = StatusReport.objects.all().order_by('-when')[:20]
         announce_date = date.today() - timedelta(days=30)
-        announce = Announcements.objects.filter(
+        announce = Announcement.objects.filter(
             when__gt=announce_date).order_by('-when')
+        # the above grabs and order all the announcements in the last 30 days
 
         return render_to_response(
             'main/user.html', {'user': User.get_by_id(uid),
