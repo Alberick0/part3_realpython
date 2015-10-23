@@ -1,0 +1,21 @@
+<!-- list of latest status messages sent out by all users of the site -->
+
+{% load staticfiles %}
+{% load main_gravatar %}
+
+<section class="info-box" id="latest_happenings">
+    <h1>Recent Status Reports</h1>
+
+    {% for report in reports %}
+        <div class="media">
+            <div class="media-object pull-left">
+                <img src="{% gravatar_url report.user.email %}"
+                     alt="{{ report.user.name }}" width="32" height="32">
+            </div>
+
+            <div class="media-body">
+                <p>{{ report.status }}</p>
+            </div>
+        </div>
+    {% endfor %}
+</section>

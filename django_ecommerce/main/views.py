@@ -8,9 +8,9 @@ def index(request):
     uid = request.session.get('user')
 
     # main landing page
-    marketing_items = MarketingItem.objects.all()
 
     if uid is None:
+        marketing_items = MarketingItem.objects.all()
         return render_to_response('main/index.html',
                                   {'marketing_items': marketing_items})
     else:
@@ -21,6 +21,7 @@ def index(request):
                                'reports': status
                                },
             context_instance=RequestContext(request)
+            # context was added because our template includes csrf_token
         )
 
 

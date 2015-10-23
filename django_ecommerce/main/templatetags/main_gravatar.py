@@ -7,17 +7,22 @@ register = template.Library()
 
 @register.simple_tag
 def gravatar_img(email, size=140):
-    url = get_url(email, size)
+    url = gravatar_url(email, size)
 
     return ''''<img class="img-circle" src="%s" height="%s"
      width="%s" 12 alt="user.avatar" />''' % (url, size, size)
 
 
-def get_url(email, size=140):
+@register.simple_tag
+def gravatar_url(email, size=140):
     default = 'http://upload.wikimedia.org/wikipedia/en/9/9b/' \
               'Yoda_Empire_Strikes_Back.png'
 
-    # query params, urlencode provides character scaping
+    # mainly for unit testing with a mock object
+    if not (isinstance(email, str)):
+        return default
+
+    # query params, urlencode provides character escaping
     query_params = urlencode([('s', str(size)),  # size of image to return
                               ('d', default)])  # default image in case
 
