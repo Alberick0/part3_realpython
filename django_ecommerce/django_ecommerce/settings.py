@@ -40,6 +40,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # 3rd party Apps
+    'embed_video',
+
     # Added for flatpages
     'django.contrib.flatpages',
 
