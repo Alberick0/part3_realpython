@@ -10,7 +10,8 @@ class MarketingItem(models.Model):
 
 
 class StatusReport(models.Model):
-    user = models.ForeignKey('payments.User')
+    # if foreign key we can reference a model with a string
+    user = models.ForeignKey('payments.User')  # done this way to avoid cir ref
     when = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=200)
 
@@ -25,4 +26,10 @@ class Announcement(models.Model):
     #     verbose_name_plural = "Announcements"  # fixes typo in admin
 
 
-# class Badge
+class Badge(models.Model):
+    img = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)
+    desc = models.TextField()
+
+    class Meta:
+        ordering = ('name',)

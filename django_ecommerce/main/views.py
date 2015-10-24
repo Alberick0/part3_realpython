@@ -21,10 +21,15 @@ def index(request):
             when__gt=announce_date).order_by('-when')
         # the above grabs and order all the announcements in the last 30 days
 
+        usr = User.get_by_id(uid)
+        badges = usr.badge.all()  # ManyToManyField created the all()
+        # all() will return a list of all related badges
+
         return render_to_response(
             'main/user.html', {'user': User.get_by_id(uid),
                                'reports': status,
-                               'announce': announce},
+                               'announce': announce,
+                               'badges': badges},
             context_instance=RequestContext(request))
         # context was added because our template includes csrf_token
 

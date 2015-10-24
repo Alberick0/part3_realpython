@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 
+from main.models import Badge
+
 
 class User(AbstractBaseUser):
     name = models.CharField(max_length=100)
@@ -12,6 +14,7 @@ class User(AbstractBaseUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     rank = models.CharField(max_length=50, default='Padwan')
+    badge = models.ManyToManyField(Badge)
 
     USERNAME_FIELD = 'email'  # describes a unique field as an unique Identifier
 
