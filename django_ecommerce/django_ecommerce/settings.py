@@ -14,6 +14,11 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 import psycopg2.extensions
 
+
+def show_toolbar(self):
+    return True
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -42,6 +47,7 @@ INSTALLED_APPS = (
 
     # 3rd party Apps
     'embed_video',
+    'debug_toolbar',
 
     # Added for flatpages
     'django.contrib.flatpages',
@@ -125,3 +131,8 @@ SITE_ID = 1
 
 STRIPE_SECRET = 'sk_test_28Gg99fjOpWqeel8CHMPpwLx'
 STRIPE_PUBLISHABLE = 'pk_live_aPtY1nvmIuSENNKKiUFezAQG'
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TEMPLATE_CONTEXT': True,
+    'SHOW_TOOLBAR_CALLBACK': show_toolbar
+}
