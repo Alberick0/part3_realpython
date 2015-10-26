@@ -19,6 +19,7 @@ class StatusReport(models.Model):
         from datetime import datetime
         if self.when is None:
             self.when = datetime.now()
+
         super(StatusReport, self).save(*args, **kwargs)
 
 

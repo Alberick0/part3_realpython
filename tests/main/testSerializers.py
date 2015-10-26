@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.test import TestCase
 from main.models import StatusReport
 from payments.models import User
@@ -5,6 +7,7 @@ from main.serializers import StatusReportSerializer
 from rest_framework.renderers import JSONRenderer
 from collections import OrderedDict
 from rest_framework.parsers import JSONParser
+from django.utils.six import BytesIO
 
 
 class StatusReportSerializerTests(TestCase):
@@ -13,13 +16,14 @@ class StatusReportSerializerTests(TestCase):
         cls.u = User(name='test', email='test@test.com')
         cls.u.save()
 
-        cls.new_status = StatusReport(user=cls.u, status='hello world')
+        cls.new_status = StatusReport(user=cls.u, status='hello world',
+                                      when=datetime.now())
         cls.new_status.save()
 
         cls.expected_dict = OrderedDict([
             ('pk', cls.new_status.id),
             ('user', cls.u.email),
-            ('when', cls.new_status.when),
+            ('when', cls.new_status.when.isoformat().replace('+00:00', 'Z')),
             ('status', 'hello world'),
         ])
 
@@ -45,5 +49,9 @@ class StatusReportSerializerTests(TestCase):
 
         serializer = StatusReportSerializer(data=data)
         self.assertTrue(serializer.is_valid())
-        self.assertEqual(self.new_status.status, serializer.object.status)
-        self.assertEqual(self.new_status.when, serializer.object.when)
+
+        self.assertEqual(
+            self.new_status.status, serializer.validated_data['status'])
+
+        self.assertEqual(
+            self.new_status.when, serializer.validated_data['when'])

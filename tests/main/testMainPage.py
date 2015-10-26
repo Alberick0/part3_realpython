@@ -1,3 +1,4 @@
+import django_ecommerce.settings as settings
 import mock
 from django.test import TestCase, override_settings
 from django.core.urlresolvers import resolve
@@ -40,7 +41,6 @@ class MainPageTests(TestCase):
         self.assertEquals(index.status_code, 200)
 
     # -- Testing templates and views --#
-    @override_settings(DEBUG_TOOLBAR_CONFIG={'DEBUG_TOOLBAR_CONFIG': False})
     def test_returns_exact_html(self):
         index = self.client.get('/')
         html = render_to_response('main/index.html')
