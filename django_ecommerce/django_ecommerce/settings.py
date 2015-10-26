@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     # 3rd party Apps
     'embed_video',
     'debug_toolbar',
+    'rest_framework',
 
     # Added for flatpages
     'django.contrib.flatpages',

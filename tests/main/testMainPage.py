@@ -1,6 +1,5 @@
 import mock
-
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.core.urlresolvers import resolve
 from django.shortcuts import render_to_response
 from django.test import RequestFactory
@@ -41,10 +40,11 @@ class MainPageTests(TestCase):
         self.assertEquals(index.status_code, 200)
 
     # -- Testing templates and views --#
+    @override_settings(DEBUG_TOOLBAR_CONFIG={'DEBUG_TOOLBAR_CONFIG': False})
     def test_returns_exact_html(self):
         index = self.client.get('/')
-        self.assertEquals(index.content, render_to_response(
-            'main/index.html').content)
+        html = render_to_response('main/index.html')
+        self.assertEquals(index.content, html.content)
 
     def test_index_handles_logged_in_user(self):
         """
