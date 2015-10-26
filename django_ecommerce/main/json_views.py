@@ -1,59 +1,35 @@
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from rest_framework import mixins, generics
 from main.serializers import StatusReportSerializer
 from main.models import StatusReport
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def status_collection(request, id):
-    """
-    Get the collection of all status_reports or create a new one
-    :param request:
-    :return:
-    """
+class StatusCollection(mixins.ListModelMixin,  # allows to serialize to JSON
+                       mixins.CreateModelMixin,  # allows POST to create
+                       generics.GenericAPIView):  # core func + Browsable API
 
-    if request.method == 'GET':
-        status_report = StatusReport.objects.all()
-        serializer = StatusReportSerializer(status_report, many=True)
-        return Response(serializer.data)
+    queryset = StatusReport.objects.all()  # required
+    serializer_class = StatusReportSerializer  # required
 
-    elif request.method == 'POST':
-        serializer = StatusReportSerializer(data=request.DATA)
+    def get(self, request):
+        return self.list(request)
 
-        if serializer.is_valid():
-            serializer.save()
-
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request):
+        return self.create(request)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def status_member(request, id):
-    """
-    Get, updae or delete a status_report instance
-    :param request:
-    :param id:
-    :return:
-    """
+class StatusMember(mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin,
+                   mixins.DestroyModelMixin,
+                   generics.GenericAPIView):
 
-    try:
-        status_report = StatusReport.objects.get(id=id)
-    except StatusReport.DoesNotExist:
-        return Response(status.HTTP_404_NOT_FOUND)
+    queryset = StatusReport.objects.all()
+    serializer_class = StatusReportSerializer
 
-    if request.method == 'GET':
-        serializer = StatusReportSerializer(status_report)
-        return Response(serializer.data)
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
-    elif request.method == 'PUT':
-        serializer = StatusReportSerializer(status_report, data=request.DATA)
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        status_report.delete()
-        return Response(status.HTTP_204_NO_CONTENT)
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
