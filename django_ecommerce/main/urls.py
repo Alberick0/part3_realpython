@@ -7,6 +7,6 @@ urlpatterns = [
         name='status_reports_collection'),
 
     # using pk instead of if since is a drf requirement
-    url(r'status_reports/(?P<pk>[0-9]+)$', json_views.StatusCollection.as_view(),
+    url(r'status_reports/(?P<pk>[0-9]+)$', json_views.StatusMember.as_view(),
         name='status_reports_collection'),
 ]

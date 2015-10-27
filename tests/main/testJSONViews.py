@@ -6,12 +6,13 @@ from main.serializers import StatusReportSerializer
 
 from payments.models import User
 
+from rest_framework import status
 from rest_framework.test import force_authenticate, APIRequestFactory
 
 
 class JsonViewTests(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls):  # only runs once
         super().setUpClass()
         cls.factory = APIRequestFactory()
 
@@ -34,3 +35,9 @@ class JsonViewTests(TestCase):
         response = StatusCollection.as_view()(self.get_request())
 
         self.assertEquals(expected_json, response.data)
+
+    def test_get_collection_requires_logged_in_user(self):
+        anon_request = self.get_request(authed=False)
+        response = StatusCollection.as_view()(anon_request)
+
+        self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
