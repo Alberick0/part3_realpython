@@ -2,6 +2,8 @@ from django.conf.urls import patterns, url, include
 from main import json_views
 
 urlpatterns = [
+    url(r'^$', json_views.api_root),
+
     # as view provides a function like interface into the class
     url(r'status_reports/$', json_views.StatusCollection.as_view(),
         name='status_reports_collection'),
@@ -14,6 +16,5 @@ urlpatterns = [
         name='badges_collection'),
 
     url(r'badges/(?P<pk>[0-9]+)$', json_views.BadgeMember.as_view(),
-        name='badges_member')
-
+        name='badges_member'),
 ]

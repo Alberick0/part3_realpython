@@ -1,4 +1,8 @@
 from rest_framework import mixins, generics, permissions
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+
 from main.serializers import StatusReportSerializer, BadgeSerializer
 from main.models import StatusReport, Badge
 from main.permissions import IsOwnerOrReadOnly
@@ -71,3 +75,11 @@ class BadgeMember(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+@api_view(('GET',))
+def api_root(request):
+    return Response({
+        'status_reports': reverse('status_reports_collection', request=request),
+        'badges': reverse('badges_collection', request=request),
+    })

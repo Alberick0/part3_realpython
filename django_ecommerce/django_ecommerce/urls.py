@@ -32,4 +32,6 @@ urlpatterns = [
 
     # api
     url(r'^api/v1/', include('main.urls')),
+    url(r'^api-auth/', include('rest_framework.urls',
+                               namespace='rest_framework')),
 ]
