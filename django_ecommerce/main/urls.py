@@ -9,4 +9,11 @@ urlpatterns = [
     # using pk instead of if since is a drf requirement
     url(r'status_reports/(?P<pk>[0-9]+)$', json_views.StatusMember.as_view(),
         name='status_reports_collection'),
+
+    url(r'badges/$', json_views.BadgeCollection.as_view(),
+        name='badges_collection'),
+
+    url(r'badges/(?P<pk>[0-9]+)$', json_views.BadgeMember.as_view(),
+        name='badges_member')
+
 ]

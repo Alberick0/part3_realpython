@@ -22,6 +22,9 @@ class StatusReport(models.Model):
 
         super(StatusReport, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return self.status
+
 
 class Announcement(models.Model):
     when = models.DateTimeField(auto_now=True)
@@ -37,6 +40,9 @@ class Badge(models.Model):
     img = models.CharField(max_length=255)
     name = models.CharField(max_length=100)
     desc = models.TextField()
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         ordering = ('name',)

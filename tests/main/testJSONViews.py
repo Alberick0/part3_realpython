@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from main.json_views import StatusCollection
+from main.json_views import StatusCollection, StatusMember
 from main.models import StatusReport
 from main.serializers import StatusReportSerializer
 
@@ -41,3 +41,28 @@ class JsonViewTests(TestCase):
         response = StatusCollection.as_view()(anon_request)
 
         self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_member(self):
+        # create a new status
+        new_status = StatusReport(user=self.test_user, status='My status')
+        new_status.save()  # save
+
+        # get the element by id
+        my_status = StatusReport.objects.get(pk=new_status.id)
+
+        # convert to json the status
+        expected_json = StatusReportSerializer(my_status).data
+
+        response = StatusMember.as_view()(self.get_request(), pk=my_status.id)
+
+        self.assertEquals(expected_json, response.data)
+
+    def test_delete_member(self):
+        new_status = StatusReport(user=self.test_user, status='My status')
+        new_status.save()
+
+        response = StatusMember.as_view()(self.get_request(method='DELETE'),
+                                          pk=new_status.id)
+
+        self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
+        new_status.delete()
