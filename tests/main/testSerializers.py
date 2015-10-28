@@ -53,6 +53,3 @@ class StatusReportSerializerTests(TestCase):
         self.assertEqual(
             self.new_status.status, serializer.validated_data['status'])
 
-        # self.assertEqual(
-        #     self.new_status.when, serializer.validated_data['when'])
-

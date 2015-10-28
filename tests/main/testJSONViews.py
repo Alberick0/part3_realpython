@@ -13,13 +13,16 @@ from rest_framework.test import force_authenticate, APIRequestFactory
 class JsonViewTests(TestCase):
     @classmethod
     def setUpClass(cls):  # only runs once
-        super().setUpClass()
         cls.factory = APIRequestFactory()
-
-    @classmethod
-    def setUpTestData(cls):
         cls.test_user = User(id=2222, email="test@user.com")
         cls.test_user.save()
+
+        cls.new_status = StatusReport(user=cls.test_user, status='My status')
+        cls.new_status.save()  # save
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.test_user.delete()
 
     def get_request(self, method='GET', authed=True):
         request_method = getattr(self.factory, method.lower())
