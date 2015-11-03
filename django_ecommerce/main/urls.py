@@ -1,4 +1,5 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url
+
 from main import json_views
 
 urlpatterns = [

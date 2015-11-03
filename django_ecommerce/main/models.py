@@ -35,6 +35,9 @@ class Announcement(models.Model):
     # class Meta:
     #     verbose_name_plural = "Announcements"  # fixes typo in admin
 
+    def __str__(self):
+        return self.info + str(self.when)
+
 
 class Badge(models.Model):
     img = models.CharField(max_length=255)
