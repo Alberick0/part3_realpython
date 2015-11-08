@@ -5,7 +5,7 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-    dependencies = [
+    dependencies = [  # list of migrations that must be run prior to the current
     ]
 
     operations = [

@@ -23,6 +23,7 @@ class User(AbstractBaseUser):
         """
         This method is stateless, when calling it there's no need to create a
         User object
+        :param uid:
         """
         return User.objects.get(pk=uid)
 
