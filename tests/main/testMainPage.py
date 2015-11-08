@@ -1,9 +1,8 @@
-import django_ecommerce.settings as settings
 import mock
-from django.test import TestCase, override_settings
 from django.core.urlresolvers import resolve
 from django.shortcuts import render_to_response
 from django.test import RequestFactory
+from django.test import TestCase
 
 from main.views import index
 from payments.models import User
@@ -57,14 +56,16 @@ class MainPageTests(TestCase):
         user.save()
 
         # sets session value equals to user ID on DB
-        self.request.session = {'user': '1'}
+        self.request.session = {'user': '2'}
 
         # request the index page
         resp = index(self.request)
+        user_content = render_to_response(
+            'main/user.html', {'user': user}
+        ).content
 
         # verify it return the page for the logged in user
-        self.assertEquals(resp.content, render_to_response(
-            'main/user.html', {'user': user}).content)
+        self.assertEquals(resp.content, user_content)
 
     def test_verifies_index_user_foreignkey_badge_is_stabilised(self):
         # create a session that appears to have a logged in user
