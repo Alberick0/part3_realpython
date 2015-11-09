@@ -5,11 +5,10 @@ import json
 
 from django.db import migrations
 
-from main.models import MarketingItem
-
 
 def create_initial_marketing_item(apps, schema_editor):
     json_data = json.load(open('main/fixtures/system_data.json'))
+    MarketingItem = apps.get_model('main', 'MarketingItem')
 
     for member in json_data:
         new = MarketingItem(
