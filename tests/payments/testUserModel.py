@@ -1,5 +1,5 @@
-from django.test import TestCase, RequestFactory
 from django.db import IntegrityError
+from django.test import TestCase, RequestFactory
 
 from payments.models import User
 from payments.views import sign_out
@@ -9,8 +9,8 @@ class UserModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         # user
-        cls.test_user = User(email='test@testing.com', name='test user')
-        cls.test_user.save()
+        cls.test_user = User.create('test tester', 'test@testing.com', 'pass',
+                                    '1234', 10)
 
         # request
         cls.request = RequestFactory().get('/')
@@ -26,11 +26,9 @@ class UserModelTest(TestCase):
         """
         Tests User.create method
         """
-        new_user = User.create('jean', 'jean_test@hotmail.com', 'password',
-                               '1234', '1')
-        test = User.objects.get(email='jean_test@hotmail.com')
+        user = User.objects.get(email='test@testing.com')
 
-        self.assertEquals(test, new_user)
+        self.assertEquals(user, self.test_user)
 
     def test_create_user_already_exists_throws_IntegrityError(self):
         self.assertRaises(
@@ -52,3 +50,11 @@ class UserModelTest(TestCase):
         sign_out(self.request)
         self.assertEquals(self.request.session, {})
 
+    def test_create_two_users_each_user_has_unique_bigCoID(self):
+        user1 = User.create('tester test', 'testing@test.com', 'pass',
+                            '1234', '11')
+
+        user2 = User.create('tester testing', 'testing@tester.com', 'pass',
+                            '1234', '12')
+
+        self.assertNotEqual(user1.bigCoID, user2.bigCoID)
