@@ -33,11 +33,11 @@
                     {% include "payments/_field.html" %}
                 {% endfor %}
                 <div id="change-card" class="clearfix"
-                        {% if not form.last_4_digitss.value %}
+                        {% if not form.last_4_digits.value %}
                      style="display: none"{% endif %}>
                     Card
                     <div class="input">
-                        Using card ending with {{ form.last_4_digitss.value }}
+                        Using card ending with {{ form.last_4_digits.value }}
                         (<a href="#">change</a>)
                     </div>
                 </div>

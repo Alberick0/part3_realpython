@@ -14,7 +14,7 @@ $(function () {
                 if (status === 200) {
                     console.log(status, response);
                     $("#credit-card-errors").hide();
-                    $("#last_4_digitss").val(response.card.last4);
+                    $("#last_4_digits").val(response.card.last4);
                     $("#stripe_token").val(response.id);
                 }
                 // always submit form even with errors
