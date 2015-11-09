@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from django.db import models
 
 from main.models import Badge
 
@@ -17,6 +17,8 @@ class User(AbstractBaseUser):
     badge = models.ManyToManyField(Badge)
 
     USERNAME_FIELD = 'email'  # describes a unique field as an unique Identifier
+
+    bigCoID = models.CharField(max_length=50)
 
     @classmethod
     def get_by_id(cls, uid):

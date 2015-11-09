@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response
 from django.test import RequestFactory
 from django.test import TestCase
 
+from main.models import MarketingItem
 from main.views import index
 from payments.models import User
 
@@ -42,7 +43,10 @@ class MainPageTests(TestCase):
     # -- Testing templates and views --#
     def test_returns_exact_html(self):
         index = self.client.get('/')
-        html = render_to_response('main/index.html')
+        html = render_to_response(
+            'main/index.html',
+            {'marketing_items': MarketingItem.objects.all()})
+
         self.assertEquals(index.content, html.content)
 
     def test_index_handles_logged_in_user(self):
