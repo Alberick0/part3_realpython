@@ -18,7 +18,7 @@ class User(AbstractBaseUser):
 
     USERNAME_FIELD = 'email'  # describes a unique field as an unique Identifier
 
-    bigCoID = models.CharField(max_length=50)
+    bigCoID = models.CharField(max_length=50, unique=True)
 
     @classmethod
     def get_by_id(cls, uid):
