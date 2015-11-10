@@ -54,6 +54,6 @@ $(function () {
             l.html("Show Achievements");
         }
         return false;
-    })
+    });
 
 });
