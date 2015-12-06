@@ -1,11 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="">
     <head>
         <meta charset="UTF-8">
         <title>Poll: Who's the most powerful Jedi?</title>
+
+        <!-- styles -->
         <link href="http://netdna.bootstrapcdn.com/bootswatch/3.1.1/yeti/bootstrap.min.css"
               rel="stylesheet" media="screen">
+
     </head>
+
     <body>
         <div class="container">
             <div class="row">
@@ -13,57 +17,76 @@
                     <h1>Poll: Who's the most powerful Jedi?</h1>
                     <br>
 
-                    <span class="glyphicon glyphicon-plus"></span>
+                    <span ng-click="votes_for_yoda = votes_for_yoda + 1"
+                          ng-init="votes_for_yoda=0"
+                          class="glyphicon glyphicon-plus"></span>
                     <strong>Yoda</strong>
-                    <span class="pull-right">40%</span>
+                    <span class="pull-right">{{ votes_for_yoda }}</span>
 
                     <div class="progress">
                         <div class="progress-bar progress-bar-danger"
-                             role="progressbar" aria-value="40"
-                             aria-valuemin="0"
-                             aria-valuemax="100" style="width: 40%;"></div>
+                             role="progressbar"
+                             aria-value="{{ votes_for_yoda }}"
+                             aria-valuemin="0" aria-valuemax="100"
+                             style="width: {{ votes_for_yoda }}%;"></div>
                     </div>
 
-                    <span class="glyphicon glyphicon-plus"></span>
+
+                    <span ng-click="votes_for_qui = votes_for_qui + 1"
+                          ng-init="votes_for_qui=0"
+                          class="glyphicon glyphicon-plus"></span>
                     <strong>Qui-Gon Jinn</strong>
-                    <span class="pull-right">30%</span>
+                    <span class="pull-right">{{ votes_for_qui }}</span>
+
                     <div class="progress">
                         <div class="progress-bar progress-bar-info"
-                             role="progressbar" aria-value="30"
-                             aria-valuemin="0"
-                             aria-valuemax="100" style="width: 30%;"></div>
+                             role="progressbar"
+                             aria-value="{{ votes_for_qui }}"
+                             aria-valuemin="0" aria-valuemax="100"
+                             style="width: {{ votes_for_qui }}%;"></div>
                     </div>
 
-                    <span class="glyphicon glyphicon-plus"></span>
+                    <span ng-click="votes_for_obi = votes_for_obi + 1"
+                          ng-init="votes_for_obi=0"
+                          class="glyphicon glyphicon-plus"></span>
                     <strong>Obi-Wan Kenobi</strong>
-                    <span class="pull-right">10%</span>
+                    <span class="pull-right">{{ votes_for_obi }}</span>
+
                     <div class="progress">
                         <div class="progress-bar progress-bar-warning"
-                             role="progressbar" aria-value="10"
-                             aria-valuemin="0"
-                             aria-valuemax="100" style="width: 10%;"></div>
+                             role="progressbar"
+                             aria-value="{{ votes_for_obi }}"
+                             aria-valuemin="0" aria-valuemax="100"
+                             style="width: {{ votes_for_obi }}%;"></div>
                     </div>
 
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <strong>Luke Skywalker</strong>
-                    <span class="pull-right">5%</span>
+                    <span ng-click="votes_for_luke = votes_for_luke + 1"
+                          ng-init="votes_for_luke=0"
+                          class="glyphicon glyphicon-plus"></span>
+                    <strong>Luke SkyWalker</strong>
+                    <span class="pull-right">{{ votes_for_luke }}</span>
+
                     <div class="progress">
                         <div class="progress-bar progress-bar-success"
-                             role="progressbar" aria-value="5" aria-valuemin="0"
-                             aria-valuemax="100" style="width: 5%;"></div>
+                             role="progressbar"
+                             aria-value="{{ votes_for_luke }}"
+                             aria-valuemin="0" aria-valuemax="100"
+                             style="width: {{ votes_for_luke }}%;"></div>
                     </div>
 
-                    <span class="glyphicon glyphicon-plus"></span>
+
+                    <span ng-click="votes_for_me = votes_for_me + 1"
+                          ng-init="votes_for_me=0"
+                          class="glyphicon glyphicon-plus"></span>
                     <strong>Me... of course</strong>
-                    <span class="pull-right">15%</span>
+                    <span class="pull-right">{{ votes_for_me }}</span>
                     <div class="progress">
                         <div class="progress-bar progress-striped active"
-                             aria-valuenow="15"
-                             role="progressbar" aria-value="15"
+                             role="progressbar"
+                             aria-value="{{ votes_for_me }}"
                              aria-valuemin="0"
-                             aria-valuemax="100" style="width: 15%;">
-
-                            <span class="sr-only">15% Complete</span>
+                             aria-valuemax="100"
+                             style="width: {{ votes_for_me }}%;">
 
                         </div>
                     </div>
