@@ -17,74 +17,96 @@
                     <h1>Poll: Who's the most powerful Jedi?</h1>
                     <br>
 
+                    <!-- YODA -->
                     <span ng-click="vote('votes_for_yoda')"
                           class="glyphicon glyphicon-plus"></span>
                     <strong>Yoda</strong>
-                    <span class="pull-right">{{ votes_for_yoda }}</span>
+
+                    <span class="pull-right">
+                        {{ votes_for_yoda.percent | number:0 }}%
+                    </span>
 
                     <div class="progress">
                         <div class="progress-bar progress-bar-danger"
                              role="progressbar"
-                             aria-value="{{ votes_for_yoda }}"
+                             aria-value="{{ votes_for_yoda.percent }}"
                              aria-valuemin="0" aria-valuemax="100"
-                             style="width: {{ votes_for_yoda }}%;"></div>
+                             style="width: {{ votes_for_yoda.percent }}%;"></div>
                     </div>
+                    <!-- YODA -->
 
 
+                    <!-- QUI -->
                     <span ng-click="vote('votes_for_qui')"
                           class="glyphicon glyphicon-plus"></span>
+
                     <strong>Qui-Gon Jinn</strong>
-                    <span class="pull-right">{{ votes_for_qui }}</span>
+
+                    <span class="pull-right">
+                        {{ votes_for_qui.percent | number:0 }}%
+                    </span>
 
                     <div class="progress">
                         <div class="progress-bar progress-bar-info"
                              role="progressbar"
-                             aria-value="{{ votes_for_qui }}"
+                             aria-value="{{ votes_for_qui.percent }}"
                              aria-valuemin="0" aria-valuemax="100"
-                             style="width: {{ votes_for_qui }}%;"></div>
+                             style="width: {{ votes_for_qui.percent }}%;"></div>
                     </div>
+                    <!-- QUI -->
 
+                    <!-- OBI -->
                     <span ng-click="vote('votes_for_obi')"
                           class="glyphicon glyphicon-plus"></span>
                     <strong>Obi-Wan Kenobi</strong>
-                    <span class="pull-right">{{ votes_for_obi }}</span>
+                    <span class="pull-right">
+                        {{ votes_for_obi.percent | number:0 }}%
+                    </span>
 
                     <div class="progress">
                         <div class="progress-bar progress-bar-warning"
                              role="progressbar"
-                             aria-value="{{ votes_for_obi }}"
+                             aria-value="{{ votes_for_obi.percent }}"
                              aria-valuemin="0" aria-valuemax="100"
-                             style="width: {{ votes_for_obi }}%;"></div>
+                             style="width: {{ votes_for_obi.percent }}%;"></div>
                     </div>
+                    <!-- OBI -->
 
+                    <!-- LUKE -->
                     <span ng-click="vote('votes_for_luke')"
                           class="glyphicon glyphicon-plus"></span>
                     <strong>Luke SkyWalker</strong>
-                    <span class="pull-right">{{ votes_for_luke }}</span>
+                    <span class="pull-right">
+                        {{ votes_for_luke.percent | number:0 }}%
+                    </span>
 
                     <div class="progress">
                         <div class="progress-bar progress-bar-success"
                              role="progressbar"
-                             aria-value="{{ votes_for_luke }}"
+                             aria-value="{{ votes_for_luke.percent }}"
                              aria-valuemin="0" aria-valuemax="100"
-                             style="width: {{ votes_for_luke }}%;"></div>
+                             style="width: {{ votes_for_luke.percent }}%;"></div>
                     </div>
+                    <!-- LUKE -->
 
-
+                    <!-- ME -->
                     <span ng-click="vote('votes_for_me')"
                           class="glyphicon glyphicon-plus"></span>
                     <strong>Me... of course</strong>
-                    <span class="pull-right">{{ votes_for_me }}</span>
+                    <span class="pull-right">
+                        {{ votes_for_me.percent | number:0 }}%
+                    </span>
                     <div class="progress">
                         <div class="progress-bar progress-striped active"
                              role="progressbar"
-                             aria-value="{{ votes_for_me }}"
+                             aria-value="{{ votes_for_me.percent }}"
                              aria-valuemin="0"
                              aria-valuemax="100"
-                             style="width: {{ votes_for_me }}%;">
-
+                             style="width: {{ votes_for_me.percent }}%;">
                         </div>
                     </div>
+                    <!-- ME -->
+
                 </div>
             </div>
         </div>
@@ -102,22 +124,38 @@
                 type="text/javascript"></script>
 
         <script type="text/javascript">
-            var mecApp = angular.module('mecApp',[]);
+            var mecApp = angular.module('mecApp', []);
 
-            mecApp.controller('UserPollCtrl', function($scope) {
-                $scope.votes_for_yoda = 80;
-                $scope.votes_for_qui = 30;
-                $scope.votes_for_obi = 20;
-                $scope.votes_for_luke = 10;
-                $scope.votes_for_me = 30;
+            mecApp.controller('UserPollCtrl', function ($scope) {
 
-                $scope.vote = function(voteModel) {
-                    $scope[voteModel] = $scope[voteModel] + 1;
+                $scope.total_votes = 0;
+                $scope.vote_data = {};
+
+                $scope.vote = function (voteModel) {
+                    if (!$scope.vote_data.hasOwnProperty(voteModel)) {
+                        $scope.vote_data[voteModel] = {
+                            'votes': 0,
+                            'percent': 0
+                        };
+
+                        $scope[voteModel] = $scope.vote_data[voteModel];
+                    }
+
+                    $scope.vote_data[voteModel]['votes'] =
+                            $scope.vote_data[voteModel]['votes'] + 1;
+
+                    $scope.total_votes = $scope.total_votes + 1;
+
+                    for (var key in $scope.vote_data) {
+                        item = $scope.vote_data[key];
+                        item['percent'] = item['votes'] / $scope.total_votes
+                                * 100;
+                    }
+
                 };
-
             });
 
-            mecApp.controller('DaysCtrl', function($scope) {
+            mecApp.controller('DaysCtrl', function ($scope) {
                 $scope.day_of_week = 'Sunday';
             });
         </script>
