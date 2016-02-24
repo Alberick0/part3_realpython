@@ -12,7 +12,10 @@
             <form id="user_form" accept-charset="UTF-8"
                   action="{% url 'register' %}" class="form-stacked"
                   method="post">
-                {% csrf_token %}
+                {% if server == 'vagrant-ubuntu-trusty-64' %}
+                    {% csrf_token %}
+                {% endif %}
+
                 {% if form.is_bound and not form.is_valid %}
                     <div class="alert alert-{{ error.tags }}">
                         <a class="close"

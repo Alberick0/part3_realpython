@@ -2,7 +2,7 @@ import socket
 
 import mock
 from django.test import TestCase, RequestFactory
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.urlresolvers import resolve
 from django.db import IntegrityError, transaction, DatabaseError
 
@@ -14,15 +14,28 @@ from payments.models import User, UnPaidUsers
 
 class ViewTesterMixin(object):
     @classmethod
-    def setupViewTester(cls, url, view_func, expected_html, status_code=200,
+    def setupViewTester(cls, url, view_func,
+                        template=None,
+                        form=None,
+                        user=None,
+                        status_code=200,
                         session={}):
         request_factory = RequestFactory()
         cls.request = request_factory.get(url)
         cls.request.session = session
+        cls.request.META['SERVER_NAME'] = 'testserver'
         cls.status_code = status_code
         cls.url = url
         cls.view_func = staticmethod(view_func)
-        cls.expected_html = expected_html
+        cls.html = render(cls.request,
+                          template,
+                          {'form': form, 'user': user,
+                           'months': list(range(1, 12)),
+                           'publishable': settings.STRIPE_PUBLISHABLE,
+                           'soon': soon(),
+                           'years': list(
+                               range(2011, 2036)),
+                           })
 
     def test_resolves_to_right_view(self):
         test_view = resolve(self.url)
@@ -34,13 +47,17 @@ class ViewTesterMixin(object):
 
     def test_returns_correct_html(self):
         resp = self.view_func(self.request)
-        self.assertEqual(resp.content, self.expected_html)
+        if self.url == '/sign_out':
+            self.assertEqual(resp.content, b'')
+        else:
+            self.assertEqual(resp.content, self.html.content)
 
 
 class SingOutPageTests(TestCase, ViewTesterMixin):
     @classmethod
     def setUpTestData(cls):
-        ViewTesterMixin.setupViewTester('/sign_out', sign_out, b'',
+        ViewTesterMixin.setupViewTester('/sign_out', sign_out,
+                                        'main/index.html',
                                         status_code=302,
                                         session={'user': 'dummy'})
 
@@ -48,29 +65,18 @@ class SingOutPageTests(TestCase, ViewTesterMixin):
 class SignInPageTests(TestCase, ViewTesterMixin):
     @classmethod
     def setUpTestData(cls):
-        cls.html = render_to_response('payments/sign_in.html',
-                                      {'form': SigninForm(),
-                                       'user': None})
-
-        ViewTesterMixin.setupViewTester('/sign_in', sign_in, cls.html.content)
+        ViewTesterMixin.setupViewTester('/sign_in', sign_in,
+                                        'payments/sign_in.html',
+                                        form=SigninForm())
 
 
 class RegisterPageTests(TestCase, ViewTesterMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        html = render_to_response(
-            'payments/register.html',
-            {
-                'form': UserForm(),
-                'months': list(range(1, 12)),
-                'publishable': settings.STRIPE_PUBLISHABLE,
-                'soon': soon(),
-                'user': None,
-                'years': list(range(2011, 2036)),
-            })
-
-        ViewTesterMixin.setupViewTester('/register', register, html.content)
+        ViewTesterMixin.setupViewTester('/register', register,
+                                        'payments/register.html',
+                                        UserForm)
 
     def setUp(self):
         request_factory = RequestFactory()
@@ -86,9 +92,9 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
             self.request.method = 'POST'
             self.request.POST = None
             resp = register(self.request)
-            self.assertEquals(resp.content, self.expected_html)
+            self.assertEquals(resp.content, self.html.content)
 
-            # make sure that we did indeed call our is_valid function
+            # make sure that we deed call our is_valid function
             self.assertEquals(user_mock.call_count, 1)
 
     def get_mock_cust():
@@ -154,7 +160,8 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
         self.request.POST = {}
 
         # create the expected html
-        html = render_to_response(
+        html = render(
+            self.request,
             'payments/register.html',
             {
                 'form': self.get_MockUserForm(),
@@ -270,40 +277,40 @@ class RegisterPageTests(TestCase, ViewTesterMixin):
         except DatabaseError:
             pass
 
-    # def test_savepoint_roolbacks(self):
-    #     self.save_points(False)
-    #
-    #     # verify that everything was stored
-    #     users = User.objects.filter(email='inception')
-    #     self.assertEquals(len(users), 1)
-    #
-    # def test_savepoint_rollbacks(self):
-    #     self.save_points(False)
-    #
-    #     # verify that everything was stored
-    #     users = User.objects.filter(email='inception')
-    #     self.assertEquals(len(users), 1)
-    #
-    #     # note the values here are from the original create call
-    #     self.assertEquals(users[0].stripe_id, '')
-    #     self.assertEquals(users[0].name, 'jj')
-    #
-    #     # this save point was rolled back because of DatabaseError
-    #     limbo = User.objects.filter(email='illbehere@forever')
-    #     self.assertEquals(len(limbo), 0)
-    #
-    # def test_savepoint_commit(self):
-    #     self.save_points(True)
-    #
-    #     # verify that everything was stored
-    #     users = User.objects.filter(email='inception')
-    #     self.assertEquals(len(users), 1)
-    #
-    #     # note the values here are from the update calls
-    #     self.assertEquals(users[0].stripe_id, '4')
-    #     self.assertEquals(users[0].name, 'staring down the rabbit hole')
-    #
-    #     # save point was committed by exiting the context_manager without an
-    #     # exception
-    #     limbo = User.objects.filter(email='illbehere@forever')
-    #     self.assertEquals(len(limbo), 1)
+            # def test_savepoint_roolbacks(self):
+            #     self.save_points(False)
+            #
+            #     # verify that everything was stored
+            #     users = User.objects.filter(email='inception')
+            #     self.assertEquals(len(users), 1)
+            #
+            # def test_savepoint_rollbacks(self):
+            #     self.save_points(False)
+            #
+            #     # verify that everything was stored
+            #     users = User.objects.filter(email='inception')
+            #     self.assertEquals(len(users), 1)
+            #
+            #     # note the values here are from the original create call
+            #     self.assertEquals(users[0].stripe_id, '')
+            #     self.assertEquals(users[0].name, 'jj')
+            #
+            #     # this save point was rolled back because of DatabaseError
+            #     limbo = User.objects.filter(email='illbehere@forever')
+            #     self.assertEquals(len(limbo), 0)
+            #
+            # def test_savepoint_commit(self):
+            #     self.save_points(True)
+            #
+            #     # verify that everything was stored
+            #     users = User.objects.filter(email='inception')
+            #     self.assertEquals(len(users), 1)
+            #
+            #     # note the values here are from the update calls
+            #     self.assertEquals(users[0].stripe_id, '4')
+            #     self.assertEquals(users[0].name, 'staring down the rabbit hole')
+            #
+            #     # save point was committed by exiting the context_manager without an
+            #     # exception
+            #     limbo = User.objects.filter(email='illbehere@forever')
+            #     self.assertEquals(len(limbo), 1)

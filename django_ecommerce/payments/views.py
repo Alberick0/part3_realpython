@@ -121,6 +121,7 @@ def register(request):
             'soon': soon(),
             'user': user,
             'years': list(range(2011, 2036)),
+            'server': request.META['SERVER_NAME']
         },
         context_instance=RequestContext(request)
     )

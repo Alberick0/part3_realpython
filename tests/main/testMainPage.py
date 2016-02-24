@@ -1,6 +1,6 @@
 import mock
 from django.core.urlresolvers import resolve
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.test import RequestFactory
 from django.test import TestCase
 
@@ -22,9 +22,6 @@ class MainPageTests(TestCase):
         # mock a request object, so we can manipulate the session
         cls.request = RequestFactory().get('/')
 
-        # create a session that appears to have a logged user
-        cls.request.session = {}
-
     # -- Testing routes --#
     def test_root_resolves_to_main_view(self):
         """
@@ -43,9 +40,9 @@ class MainPageTests(TestCase):
     # -- Testing templates and views --#
     def test_returns_exact_html(self):
         index = self.client.get('/')
-        html = render_to_response(
-            'main/index.html',
-            {'marketing_items': MarketingItem.objects.all()})
+        html = render(self.request, 'main/index.html',
+                      {'marketing_items': MarketingItem.objects.all(),
+                       'user': None})
 
         self.assertEquals(index.content, html.content)
 
@@ -64,9 +61,9 @@ class MainPageTests(TestCase):
 
         # request the index page
         resp = index(self.request)
-        user_content = render_to_response(
-            'main/user.html', {'user': user}
-        ).content
+        user_content = render(self.request,
+                              'main/user.html', {'user': user},
+                              ).content
 
         # verify it return the page for the logged in user
         self.assertEquals(resp.content, user_content)
