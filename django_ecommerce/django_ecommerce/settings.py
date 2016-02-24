@@ -57,6 +57,7 @@ INSTALLED_APPS = (
     'main',
     'contact',
     'payments',
+    'djangular_polls',
 )
 
 MIDDLEWARE_CLASSES = (

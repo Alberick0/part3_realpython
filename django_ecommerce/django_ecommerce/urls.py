@@ -18,7 +18,14 @@ from django.contrib import admin
 
 from payments import views
 import main.views
+import main.urls
+
 import contact.views
+
+import djangular_polls.urls
+
+
+api_patterns = main.urls.urlpatterns + djangular_polls.urls.urlpatterns
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -34,7 +41,8 @@ urlpatterns = [
     url(r'^report$', main.views.report, name='report'),
 
     # api
-    url(r'^api/v1/', include('main.urls')),
+    url(r'^api/v1/', include(api_patterns)),
+
     url(r'^api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
 ]

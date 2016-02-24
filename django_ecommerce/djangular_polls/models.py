@@ -7,7 +7,7 @@ class Poll(models.Model):
     publish_date = models.DateTimeField(auto_now=True)
 
     def poll_items(self):
-        pass
+        return self.pollitem_set.alll()
 
 
 class PollItem(models.Model):
