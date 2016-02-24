@@ -24,7 +24,6 @@ import contact.views
 
 import djangular_polls.urls
 
-
 api_patterns = main.urls.urlpatterns + djangular_polls.urls.urlpatterns
 
 urlpatterns = [

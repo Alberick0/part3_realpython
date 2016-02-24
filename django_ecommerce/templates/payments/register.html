@@ -14,8 +14,10 @@
                   method="post">
                 {% csrf_token %}
                 {% if form.is_bound and not form.is_valid %}
-                    <div class="alert alert-{{ error.tags }}"><a class="close"
-                                                                 data-dismiss="alert">×</a>
+                    <div class="alert alert-{{ error.tags }}">
+                        <a class="close"
+                           data-dismiss="alert">×
+                        </a>
 
                         <div class="errors">
                             {% for field in form.visible_fields %}
@@ -38,7 +40,9 @@
                     Card
                     <div class="input">
                         Using card ending with {{ form.last_4_digits.value }}
-                        (<a href="#">change</a>)
+                        (
+                        <a href="#">change</a>
+                        )
                     </div>
                 </div>
                 {% include "payments/_cardform.html" %}

@@ -24,4 +24,3 @@ class StatusReportSerializer(serializers.ModelSerializer):
 class BadgeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Badge
-

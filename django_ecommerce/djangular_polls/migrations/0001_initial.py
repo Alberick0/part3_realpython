@@ -7,7 +7,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -17,7 +16,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Poll',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True,
+                                        serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=100)),
                 ('publish_date', models.DateTimeField(auto_now=True)),
             ],
@@ -25,12 +25,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PollItem',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True,
+                                        serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=30)),
                 ('text', models.CharField(max_length=100)),
                 ('votes', models.IntegerField(default=0)),
-                ('percentage', models.DecimalField(decimal_places=2, default=0.0, max_digits=5)),
-                ('poll', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='items', to='djangular_polls.Poll')),
+                ('percentage',
+                 models.DecimalField(decimal_places=2, default=0.0,
+                                     max_digits=5)),
+                ('poll',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='items',
+                                   to='djangular_polls.Poll')),
             ],
             options={
                 'ordering': ['-text'],

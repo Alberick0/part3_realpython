@@ -8,15 +8,15 @@
     {% for a in announce %}
         <div class="full-image">
             {% if a.vid %}
-                {% video a.vid  'medium' %}
+                {% video a.vid 'medium' %}
             {% else %}
                 <img src="{% static 'img/'|add:a.img %}" alt="">
             {% endif %}
         </div>
 
         <div>
-        {{ a.info | safe }}  <!-- safe prevent escaping data so it will be
-        rendered as HTML instead of plain text -->
+            {{ a.info | safe }}  <!-- safe prevent escaping data so it will be
+            rendered as HTML instead of plain text -->
         </div>
         <br>
     {% endfor %}

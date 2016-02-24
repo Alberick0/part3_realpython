@@ -62,7 +62,6 @@ class BadgeMember(mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin,
                   mixins.DestroyModelMixin,
                   generics.GenericAPIView):
-
     queryset = Badge.objects.all()
     serializer_class = BadgeSerializer
     permission_classes = (permissions.IsAuthenticated,)

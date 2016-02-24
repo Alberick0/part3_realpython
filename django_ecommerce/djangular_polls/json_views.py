@@ -5,7 +5,6 @@ from rest_framework import mixins, generics
 
 class PollCollection(mixins.ListModelMixin, mixins.CreateModelMixin,
                      generics.GenericAPIView):
-
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
 
@@ -18,7 +17,6 @@ class PollCollection(mixins.ListModelMixin, mixins.CreateModelMixin,
 
 class PollMember(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
                  mixins.DestroyModelMixin, generics.GenericAPIView):
-
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
 
@@ -34,7 +32,6 @@ class PollMember(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
 
 class PollItemCollection(mixins.ListModelMixin, mixins.CreateModelMixin,
                          generics.GenericAPIView):
-
     queryset = PollItem.objects.all()
     serializer_class = PollItemSerializer
 
@@ -47,7 +44,6 @@ class PollItemCollection(mixins.ListModelMixin, mixins.CreateModelMixin,
 
 class PollItemMember(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
                      mixins.DestroyModelMixin, generics.GenericAPIView):
-
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
 

@@ -24,31 +24,46 @@
     <body>
         <!-- NAVBAR========================================================= -->
         <div class="navbar-wrapper">
-            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+            <nav class="navbar navbar-inverse navbar-static-top"
+                 role="navigation">
                 <div class="container">
                     <header class="navbar-header">
                         <button type="button" class="navbar-toggle"
-                                data-toggle="collapse" data-target=".navbar-collapse">
+                                data-toggle="collapse"
+                                data-target=".navbar-collapse">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
 
-                        <a href="#" class="navbar-brand">Mos Eisley's Cantina</a>
+                        <a href="#" class="navbar-brand">Mos Eisley's Cantina
+                        </a>
                     </header>
 
                     <div class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
-                            <li class="active"><a href="{% url 'home' %}">Home</a></li>
-                            <li><a href="/pages/about">About</a></li>
-                            <li><a href="{% url 'contact' %}">Contact</a></li>
+                            <li class="active">
+                                <a href="{% url 'home' %}">Home</a>
+                            </li>
+                            <li>
+                                <a href="/pages/about">About</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'contact' %}">Contact</a>
+                            </li>
 
                             {% if user %}
-                                <li><a href="{% url 'sign_out' %}">Logout</a></li>
+                                <li>
+                                    <a href="{% url 'sign_out' %}">Logout</a>
+                                </li>
                             {% else %}
-                                <li><a href="{% url 'sign_in' %}">Login</a></li>
-                                <li><a href="{% url 'register' %}">Register</a></li>
+                                <li>
+                                    <a href="{% url 'sign_in' %}">Login</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'register' %}">Register</a>
+                                </li>
                             {% endif %}
                         </ul>
                     </div> <!-- end navbar links -->
@@ -61,15 +76,20 @@
             {% endblock %}
 
 
-        <hr class="featurette-divider">
+            <hr class="featurette-divider">
 
-        <!-- FOOTER ======================================================== -->
-        <footer>
-            <p class="pull-right"><a href="/#">Back to top</a></p>
+            <!-- FOOTER ======================================================== -->
+            <footer>
+                <p class="pull-right">
+                    <a href="/#">Back to top</a>
+                </p>
 
-            <p class="pull-left">&copy; 2014<a href="http://alberick.me">The Jedi Council</a></p>
-            <p class="text-center">&middot; Powered by about 37 AT-AT Walkers, Python 3 and Django &middot;</p>
-        </footer>
+                <p class="pull-left">&copy; 2014
+                    <a href="http://alberick.me">The Jedi Council</a>
+                </p>
+                <p class="text-center">&middot; Powered by about 37 AT-AT
+                    Walkers, Python 3 and Django &middot;</p>
+            </footer>
 
         </div>
 
@@ -77,7 +97,7 @@
         <script type="text/javascript"> //<![CDATA[
         var Stripe;
         Stripe.setPublishableKey('pk_test_zRs9mEIEDqfXZRkqepV6YDcF');
-            //]]>
+        //]]>
         </script>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -85,7 +105,7 @@
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="{% static "js/bootstrap.min.js" %}"></script>
         <script src="{% static "js/application.js" %}"></script>
-    {% block extrajs %}
-    {% endblock %}
+        {% block extrajs %}
+        {% endblock %}
     </body>
 </html>

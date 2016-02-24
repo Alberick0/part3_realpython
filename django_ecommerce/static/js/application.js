@@ -19,13 +19,13 @@ $(function () {
                 }
                 // always submit form even with errors
                 form.submit();
-                });
-        //else {
-        //            $("#stripe-error-message").text(response.error.message);
-        //            $("#credit-card-errors").show();
-        //            $("#user_submit").attr("disabled", false);
-        //        }
-        //    });
+            });
+            //else {
+            //            $("#stripe-error-message").text(response.error.message);
+            //            $("#credit-card-errors").show();
+            //            $("#user_submit").attr("disabled", false);
+            //        }
+            //    });
 
             return false;
 
@@ -43,7 +43,7 @@ $(function () {
     });
 
     //show status in the achievements
-    $("show-achieve").click(function() {
+    $("show-achieve").click(function () {
         a = $("#achievements");
         l = $("#show-achieve");
         if (a.hasClass('hide')) {
