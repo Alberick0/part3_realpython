@@ -1,4 +1,5 @@
 from django import template
+from django.utils.safestring import mark_safe
 from urllib.parse import urlencode
 import hashlib
 
@@ -9,8 +10,8 @@ register = template.Library()
 def gravatar_img(email, size=140):
     url = gravatar_url(email, size)
 
-    return ''''<img class="img-circle" src="%s" height="%s"
-     width="%s" 12 alt="user.avatar" />''' % (url, size, size)
+    return mark_safe(''''<img class="img-circle" src="%s" height="%s"
+     width="%s" 12 alt="user.avatar" />''' % (url, size, size))
 
 
 @register.simple_tag
