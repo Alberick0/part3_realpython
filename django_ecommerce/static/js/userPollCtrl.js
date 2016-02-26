@@ -1,25 +1,58 @@
-var pollsApp = angular.module('pollsApp', []);
+mecApp.controller('UserPollCtrl', function ($scope, pollFactory) {
 
-pollsApp.config(function ($interpolateProvider) {
-    $interpolateProvider.startSymbol('[[')
-        .endSymbol(']]');
-});
+    //get the Poll
+    $scope.poll = "";
+    function setPoll(promise) {
+        $scope.poll = promise;
+    }
 
-pollsApp.controller('UserPollCtrl', function ($scope) {
-    $scope.total_votes = 0;
-    $scope.vote_data = {};
+    function getPoll() {
+        return pollFactory.getPoll(1);
+    }
 
-    $scope.vote = function (voteModel) {
-        if (!scope.vote_data.hasOwnProperty(voteModel)) {
-            $scope.vote_data[voteModel] = {'votes': 0, 'percentage': 0};
-            $scope[voteModel] = $scope.vote_data[voteModel];
-        }
-        $scope.vote_data[voteModel]['votes'] = $scope.vote_data[voteModel]['votes'] + 1;
-        $scope.total_votes = $scope.total_votes + 1;
-
-        for (var key in $scope.vote_data) {
-            item = $scope.vote_data[key];
-            item['percent'] = item['votes'] / $scope.total_votes * 100;
-        }
+    $scope.barcolor = function (i) {
+        colors = ['progress-bar-success', 'progress-bar-info',
+            'progress-bar-warning', 'progress-bar-danger', ''];
+        idx = i % colors.length;
+        return colors[idx];
     };
+
+    getPoll().then(setPoll);
+
+    $scope.vote = function (item) {
+        pollFactory.vote_for_item(item)
+            .then(getPoll)
+            .then(setPoll);
+    }
+
 });
+
+mecApp.factory('pollFactory', function ($http, $filter) {
+
+    var baseUrl = '/api/v1/';
+    var pollUrl = baseUrl + 'polls/';
+    var pollItemsUrl = baseUrl + 'poll_items/';
+    var pollId = 0;
+    var pollFactory = {};
+
+    pollFactory.getPoll = function () {
+        var tempUrl = pollUrl;
+        if (pollId != 0) {
+            tempUrl = pollUrl + pollId;
+        }
+
+        return $http.get(pollUrl).then(function (response) {
+            var latestPoll = $filter('orderBy')(response.data, '-publish_date')[0];
+            pollId = latestPoll.id;
+            return latestPoll;
+        });
+    };
+
+    pollFactory.vote_for_item = function (poll_item) {
+        poll_item.votes += 1;
+        return $http.put(pollItemsUrl + poll_item.id, poll_item);
+    };
+
+    return pollFactory;
+});
+

@@ -1,0 +1,26 @@
+db:
+  image: postgres:9.5
+  ports:
+    - "5432:5432"
+memcached:
+  image: memcached
+server:
+  build: .
+  links:
+    - db
+    - memcached
+  volumes:
+    - ./django_ecommerce:/usr/src/app/django_ecommerce
+  ports:
+    - "3031:3031"
+  command: uwsgi uwsgi.ini
+proxy:
+  image: nginx:1.9.9
+  links:
+    - server
+  volumes:
+    - ./deploy/nginx/sites-enabled/part3_realpython.conf:/etc/nginx/conf.d/part3_realpython.conf:ro
+  volumes_from:
+    - server
+  ports:
+   - "80:80"

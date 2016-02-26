@@ -1,97 +1,18 @@
-<section class="info-box" id="polls" ng-app="pollsApp"></section>
-<div ng-controller="UserPollCtrl">
-    <h1>Poll: Who's the most powerful Jedi?</h1>
-    <br>
-
-    <!-- YODA -->
-    <span ng-click="vote('votes_for_yoda')"
-          class="glyphicon glyphicon-plus"></span>
-    <strong>Yoda</strong>
-
-    <span class="pull-right">
-        [[ votes_for_yoda.percent | number:0 ]]%
-    </span>
-
-    <div class="progress">
-        <div class="progress-bar progress-bar-danger"
-             role="progressbar"
-             aria-value="[[ votes_for_yoda.percent ]]"
-             aria-valuemin="0" aria-valuemax="100"
-             style="width: [[ votes_for_yoda.percent ]]%;"></div>
-    </div>
-    <!-- YODA -->
-
-
-    <!-- QUI -->
-    <span ng-click="vote('votes_for_qui')"
-          class="glyphicon glyphicon-plus"></span>
-
-    <strong>Qui-Gon Jinn</strong>
-
-    <span class="pull-right">
-        [[ votes_for_qui.percent | number:0 ]]%
-    </span>
-
-    <div class="progress">
-        <div class="progress-bar progress-bar-info"
-             role="progressbar"
-             aria-value="[[ votes_for_qui.percent ]]"
-             aria-valuemin="0" aria-valuemax="100"
-             style="width: [[ votes_for_qui.percent ]]%;"></div>
-    </div>
-    <!-- QUI -->
-
-    <!-- OBI -->
-    <span ng-click="vote('votes_for_obi')"
-          class="glyphicon glyphicon-plus"></span>
-    <strong>Obi-Wan Kenobi</strong>
-    <span class="pull-right">
-        [[ votes_for_obi.percent | number:0 ]]%
-    </span>
-
-    <div class="progress">
-        <div class="progress-bar progress-bar-warning"
-             role="progressbar"
-             aria-value="[[ votes_for_obi.percent ]]"
-             aria-valuemin="0" aria-valuemax="100"
-             style="width: [[ votes_for_obi.percent ]]%;"></div>
-    </div>
-    <!-- OBI -->
-
-    <!-- LUKE -->
-    <span ng-click="vote('votes_for_luke')"
-          class="glyphicon glyphicon-plus"></span>
-    <strong>Luke SkyWalker</strong>
-    <span class="pull-right">
-        [[ votes_for_luke.percent | number:0 ]]%
-    </span>
-
-    <div class="progress">
-        <div class="progress-bar progress-bar-success"
-             role="progressbar"
-             aria-value="[[ votes_for_luke.percent ]]"
-             aria-valuemin="0" aria-valuemax="100"
-             style="width: [[ votes_for_luke.percent ]]%;"></div>
-    </div>
-    <!-- LUKE -->
-
-    <!-- ME -->
-    <span ng-click="vote('votes_for_me')"
-          class="glyphicon glyphicon-plus"></span>
-    <strong>Me... of course</strong>
-    <span class="pull-right">
-        [[ votes_for_me.percent | number:0 ]]%
-    </span>
-    <div class="progress">
-        <div class="progress-bar progress-striped active"
-             role="progressbar"
-             aria-value="[[ votes_for_me.percent ]]"
-             aria-valuemin="0"
-             aria-valuemax="100"
-             style="width: [[ votes_for_me.percent ]]%;">
+<section class="info-box" id="polls">
+    <div ng-controller='UserPollCtrl'>
+        <h1>Poll: [[ poll.title ]]</h1>
+        <div ng-repeat="item in poll.items">
+            <span ng-click='vote(item)' class="glyphicon glyphicon-plus"></span>
+            <strong>[[ item.text ]]</strong>
+            <span class="pull-right">[[ item.percentage | number:0 ]]%</span>
+            <div class="progress">
+                <div class="progress-bar [[ barcolor($index) ]]"
+                     role="progressbar"
+                     aria-value="[[ item.percentage ]]"
+                     aria-valuemin="0" aria-valuemax="100"
+                     style="width: [[ item.percentage ]]%;">
+                </div>
+            </div>
         </div>
     </div>
-    <!-- ME -->
-
-</div>
-
+</section>

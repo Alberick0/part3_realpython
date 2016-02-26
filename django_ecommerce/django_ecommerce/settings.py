@@ -97,9 +97,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'django_db',
-        'USER': 'djangousr',
-        'PASSWORD': 'pass',
-        'HOST': 'localhost',
+        'USER': 'postgres',
+        'HOST': '172.17.0.2',
         'PORT': '5432',
     }
 }
@@ -131,5 +130,5 @@ STRIPE_PUBLISHABLE = 'pk_live_aPtY1nvmIuSENNKKiUFezAQG'
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TEMPLATE_CONTEXT': True,
-    # 'SHOW_TOOLBAR_CALLBACK': show_toolbar
+    'SHOW_TOOLBAR_CALLBACK': show_toolbar
 }

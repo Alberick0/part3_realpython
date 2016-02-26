@@ -1,9 +1,12 @@
-Django==1.8.4
+Django==1.9.1
+django-debug-toolbar==1.4
 django-embed-video==1.0.0
-djangorestframework==3.2.4
+djangorestframework==3.3.2
 mock==1.3.0
 pbr==1.8.1
 psycopg2==2.6.1
 requests==2.8.1
 six==1.10.0
+sqlparse==0.1.17
 stripe==1.27.1
+uWSGI==2.0.12

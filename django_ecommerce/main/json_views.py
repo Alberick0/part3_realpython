@@ -81,4 +81,6 @@ def api_root(request):
     return Response({
         'status_reports': reverse('status_reports_collection', request=request),
         'badges': reverse('badges_collection', request=request),
+        'polls': reverse('polls_collection', request=request),
+        'polls_items': reverse('poll_item_collection', request=request),
     })
